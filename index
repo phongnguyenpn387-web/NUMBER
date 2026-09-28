@@ -1,0 +1,1814 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Henry English • Numbers 1–20 Practice</title>
+<style>
+:root{
+  --navy:#000055;
+  --orange:#FF6600;
+  --blue:#2867e8;
+  --green:#17a455;
+  --red:#e53935;
+  --yellow:#ffc928;
+  --ink:#1f2937;
+  --muted:#6b7280;
+  --bg:#f4f7ff;
+  --card:#fff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 8% 8%,rgba(255,102,0,.13),transparent 25%),
+    radial-gradient(circle at 92% 12%,rgba(40,103,232,.13),transparent 24%),
+    linear-gradient(180deg,#fbfcff,#f1f5ff);
+}
+button{font:inherit}
+.screen{display:none;min-height:100vh;padding:18px}
+.screen.active{display:flex;align-items:center;justify-content:center}
+.shell{width:min(1080px,100%);margin:auto}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-bottom:14px;flex-wrap:wrap
+}
+.brand{font-weight:950;color:var(--navy);font-size:clamp(21px,3vw,31px);letter-spacing:.5px}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill,.roundbtn{
+  background:#fff;border:2px solid #e5e9f4;color:var(--navy);
+  box-shadow:0 7px 20px rgba(0,0,85,.06)
+}
+.pill{border-radius:999px;padding:9px 14px;font-weight:850}
+.roundbtn{
+  width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:20px;
+}
+.roundbtn.off{opacity:.48;filter:grayscale(1)}
+.panel{
+  position:relative;overflow:hidden;
+  background:rgba(255,255,255,.96);
+  border:1px solid #e7eaf4;
+  border-radius:30px;
+  box-shadow:0 20px 60px rgba(0,0,85,.11);
+  padding:clamp(20px,3.5vw,38px);
+}
+.home-title{text-align:center;margin:0 0 10px;color:var(--navy);font-size:clamp(30px,5vw,48px)}
+.home-sub{text-align:center;color:var(--muted);margin:0 auto 28px;max-width:720px;font-size:17px}
+.branch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.branch{
+  border:2px solid #e5e9f4;border-radius:26px;padding:24px;cursor:pointer;
+  background:linear-gradient(145deg,#fff,#f9fbff);transition:.2s ease;
+  box-shadow:0 10px 24px rgba(30,41,59,.06);text-align:left;
+}
+.branch:hover{transform:translateY(-4px);border-color:#c7d0f5;box-shadow:0 16px 32px rgba(0,0,85,.10)}
+.branch .icon{font-size:56px;display:block;margin-bottom:14px}
+.branch h2{margin:0 0 9px;color:var(--navy);font-size:25px}
+.branch p{margin:0;color:var(--muted);line-height:1.5}
+.branch strong{color:var(--orange)}
+.back{
+  border:none;border-radius:14px;background:#fff;color:var(--navy);font-weight:900;
+  border:2px solid #e3e7f2;padding:10px 14px;cursor:pointer
+}
+.mode-title{text-align:center;color:var(--navy);font-size:clamp(28px,4vw,40px);margin:4px 0 8px}
+.mode-sub{text-align:center;color:var(--muted);margin:0 0 25px}
+.mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.mode{
+  border:none;border-radius:24px;padding:25px;background:#fff;cursor:pointer;text-align:left;
+  border:2px solid #e5e9f4;box-shadow:0 10px 24px rgba(30,41,59,.06);transition:.2s
+}
+.mode:hover{transform:translateY(-3px);border-color:#bfc9f0}
+.mode .num{
+  display:inline-flex;width:44px;height:44px;border-radius:50%;align-items:center;justify-content:center;
+  background:var(--orange);color:#fff;font-weight:950;font-size:22px;margin-bottom:12px
+}
+.mode h3{margin:0 0 8px;font-size:23px;color:var(--navy)}
+.mode p{margin:0;color:var(--muted);line-height:1.5}
+
+/* Shared game card */
+.game-grid{
+  display:grid;grid-template-columns:minmax(260px,.95fr) minmax(300px,1.05fr);
+  gap:clamp(20px,4vw,46px);align-items:center
+}
+.visual{
+  min-height:325px;border-radius:26px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#eef4ff,#fff6eb);border:2px dashed #d7ddef;
+  position:relative
+}
+.emoji{font-size:clamp(105px,17vw,180px);filter:drop-shadow(0 10px 18px rgba(0,0,0,.12));user-select:none}
+.prompt{text-align:center}
+.kicker{color:var(--orange);font-weight:950;text-transform:uppercase;letter-spacing:1px;font-size:13px}
+.word{margin:13px 0 10px;font-size:clamp(48px,8vw,88px);font-weight:950;letter-spacing:4px;color:var(--navy);line-height:1}
+.word .blank{display:inline-block;min-width:.72em;border-bottom:7px solid var(--orange);color:var(--orange)}
+.hint{color:var(--muted);font-size:15px;margin-bottom:20px}
+.options{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.option{
+  border-radius:19px;padding:17px 10px;font-size:clamp(27px,4vw,40px);font-weight:950;
+  background:#fff;border:2px solid #dfe4f2;color:var(--navy);
+  box-shadow:0 8px 18px rgba(30,41,59,.07);cursor:pointer;transition:.18s;touch-action:manipulation
+}
+.option:hover{transform:translateY(-2px);border-color:#abb8e8}
+.option:active{transform:scale(.97)}
+.option.correct{background:#e9faef;border-color:#24b66c;color:#148849}
+.option.wrong{background:#fff0f0;border-color:#ef5350;color:#c82b29;animation:shake .28s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.feedback{min-height:36px;margin-top:16px;font-weight:900;font-size:20px}
+.feedback.ok{color:var(--green)}.feedback.bad{color:var(--red)}
+.progress-wrap{height:11px;background:#edf0f7;border-radius:999px;overflow:hidden;margin-top:24px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--orange),#ff9c54);transition:.3s}
+
+/* Letter auto mode */
+.letter-stage{text-align:center;padding:12px 0}
+.letter-big{
+  width:min(360px,75vw);height:min(360px,75vw);max-height:360px;margin:8px auto 20px;
+  display:flex;align-items:center;justify-content:center;border-radius:36px;
+  font-size:clamp(150px,28vw,260px);font-weight:1000;line-height:1;
+  color:#fff;text-shadow:0 7px 0 rgba(0,0,0,.08);
+  box-shadow:0 20px 45px rgba(0,0,85,.15);
+  background:linear-gradient(145deg,var(--blue),var(--navy));
+}
+.read-status{font-size:20px;font-weight:900;color:var(--orange);min-height:32px}
+
+.number-big{
+  width:min(360px,75vw);height:min(300px,62vw);max-height:300px;margin:8px auto 12px;
+  display:flex;align-items:center;justify-content:center;border-radius:36px;
+  font-size:clamp(120px,24vw,220px);font-weight:1000;line-height:1;
+  color:#fff;text-shadow:0 7px 0 rgba(0,0,0,.08);
+  box-shadow:0 20px 45px rgba(0,0,85,.15);
+  background:linear-gradient(145deg,var(--orange),#d94f00);
+}
+.number-word{
+  font-size:clamp(34px,6vw,58px);font-weight:1000;color:var(--navy);letter-spacing:2px;
+  margin:4px 0 10px;text-transform:uppercase;
+}
+.small-note{color:var(--muted);font-size:14px;margin-top:8px}
+.controls-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.ctrl{
+  border:none;border-radius:16px;padding:12px 18px;font-weight:900;cursor:pointer;
+  background:var(--navy);color:#fff
+}
+.ctrl.alt{background:#fff;color:var(--navy);border:2px solid #dfe4f2}
+
+/* Letter listen mode */
+.listen-wrap{text-align:center}
+.speaker{
+  width:150px;height:150px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(145deg,var(--orange),#ff8b3d);color:white;font-size:68px;
+  box-shadow:0 18px 35px rgba(255,102,0,.25);margin:12px auto 24px;display:flex;align-items:center;justify-content:center
+}
+.speaker:active{transform:scale(.97)}
+.letter-options{max-width:650px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.letter-choice{
+  min-height:105px;border-radius:23px;background:#fff;border:3px solid #dfe4f2;
+  color:var(--navy);font-size:55px;font-weight:1000;cursor:pointer;transition:.18s;
+  box-shadow:0 9px 20px rgba(30,41,59,.07)
+}
+.letter-choice:hover{transform:translateY(-3px);border-color:#aab7e9}
+.letter-choice.correct{background:#e9faef;border-color:#25b66d;color:#168849}
+.letter-choice.wrong{background:#fff0f0;border-color:#ef5350;color:#c52a28;animation:shake .28s ease}
+.listen-feedback{min-height:40px;margin-top:16px;font-size:20px;font-weight:900}
+
+/* finish */
+.finish{text-align:center;padding:30px 12px}
+.finish .trophy{font-size:90px}
+.finish h2{font-size:38px;color:var(--navy);margin:10px 0}
+.finish p{color:var(--muted);font-size:18px}
+.finish button{margin:8px;border:none;border-radius:16px;padding:13px 20px;font-weight:900;cursor:pointer}
+.finish .primary{background:var(--navy);color:#fff}.finish .secondary{background:#fff;color:var(--navy);border:2px solid #dfe4f2}
+
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;width:9px;height:18px;border-radius:2px;opacity:0}
+
+
+/* Head-controlled game */
+.head-layout{
+  display:grid;grid-template-columns:minmax(240px,.78fr) minmax(340px,1.22fr);
+  gap:20px;align-items:start
+}
+.camera-card{
+  background:#0b1020;border-radius:24px;overflow:hidden;position:relative;min-height:300px;
+  box-shadow:0 14px 35px rgba(0,0,0,.16)
+}
+.camera-card video{
+  width:100%;height:300px;object-fit:cover;transform:scaleX(-1);display:block;background:#101827
+}
+.camera-overlay{position:absolute;inset:0;pointer-events:none;border:4px solid transparent;transition:.15s}
+.camera-overlay.left{
+  border-left-color:var(--orange);
+  background:linear-gradient(90deg,rgba(255,102,0,.16),transparent 48%)
+}
+.camera-overlay.right{
+  border-right-color:var(--blue);
+  background:linear-gradient(270deg,rgba(40,103,232,.16),transparent 48%)
+}
+.camera-status{
+  position:absolute;left:10px;right:10px;bottom:10px;background:rgba(0,0,0,.72);color:#fff;
+  border-radius:12px;padding:8px 10px;font-size:13px;text-align:center
+}
+.direction-flip{
+  position:absolute;right:10px;top:10px;z-index:3;border:none;border-radius:999px;padding:8px 11px;
+  background:rgba(255,255,255,.9);color:var(--navy);font-size:12px;font-weight:900;cursor:pointer;
+  box-shadow:0 5px 14px rgba(0,0,0,.15)
+}
+.camera-start{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;border:none;
+  border-radius:16px;padding:13px 18px;font-weight:900;background:var(--orange);color:#fff;cursor:pointer
+}
+.head-game{text-align:center}
+.head-prompt{
+  margin:8px auto 16px;border:2px solid #e5e9f4;border-radius:22px;background:#fff;padding:18px;
+  min-height:105px;display:flex;align-items:center;justify-content:center;flex-direction:column
+}
+.head-prompt .bigword{font-size:clamp(36px,6vw,64px);font-weight:1000;color:var(--navy);letter-spacing:2px}
+.head-answers{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.head-choice{
+  border:3px solid #dfe4f2;border-radius:24px;background:#fff;min-height:175px;padding:16px;cursor:pointer;
+  box-shadow:0 9px 22px rgba(30,41,59,.07);font-weight:950;color:var(--navy);transition:.16s
+}
+.head-choice.correct{background:#e9faef;border-color:#24b66c;color:#148849}
+.head-choice.wrong{background:#fff0f0;border-color:#ef5350;color:#c82b29}
+.head-choice .side{display:block;font-size:14px;color:#64748b;margin-bottom:8px}
+.head-choice .pic{display:block;font-size:76px;line-height:1.1;margin-bottom:7px}
+.head-choice .letter{display:block;font-size:70px;line-height:1.1}
+.head-choice .label{display:block;font-size:20px;line-height:1.15;word-break:break-word}
+.head-instruction{color:#64748b;font-size:14px;margin-top:12px;line-height:1.45}
+.head-instruction b{color:var(--navy)}
+.calibrate{
+  display:inline-block;background:#fff4ec;color:#b94b00;border-radius:999px;padding:5px 10px;
+  font-weight:850;margin-bottom:5px
+}
+
+@media(max-width:760px){
+  .screen{padding:10px}
+  .panel{border-radius:23px;padding:18px}
+  .branch-grid,.mode-grid,.game-grid{grid-template-columns:1fr}
+  .visual{min-height:215px}
+  .emoji{font-size:110px}
+  .branch,.mode{padding:20px}
+  .letter-big{height:250px;width:250px;font-size:180px}
+  .number-big{height:220px;width:250px;font-size:155px}
+  .number-word{font-size:38px}
+  .letter-options{gap:9px}
+  .letter-choice{min-height:90px;font-size:48px}
+  .head-layout{grid-template-columns:1fr}
+  .camera-card,.camera-card video{min-height:235px;height:235px}
+  .head-choice{min-height:140px}
+  .head-choice .pic{font-size:60px}
+  .head-choice .letter{font-size:56px}
+}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<section class="screen" id="homeScreen">
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">HENRY ENGLISH • LETTER & NUMBER PRACTICE</div>
+      <div class="actions">
+        <button class="roundbtn musicToggle" type="button" title="Bật / tắt nhạc nền">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h1 class="home-title">Chọn nội dung luyện tập</h1>
+      <p class="home-sub">Luyện chữ cái và từ vựng với các hoạt động nghe, nhận diện và phản xạ tự động.</p>
+      <div class="branch-grid">
+        <button class="branch" onclick="showScreen('vocabMenuScreen')">
+          <span class="icon">🧠</span>
+          <h2>Từ vựng</h2>
+          <p>Gồm <strong>Điền chữ còn thiếu</strong> và <strong>Game phản xạ bằng đầu</strong>.</p>
+        </button>
+        <button class="branch" onclick="showScreen('letterMenuScreen')">
+          <span class="icon">🔤</span>
+          <h2>Học chữ cái A–Z</h2>
+          <p>Gồm <strong>4 nhóm 6 chữ cái</strong> và <strong>1 mục đầy đủ A–Z</strong>. Mỗi mục có 3 cách luyện.</p>
+        </button>
+        <button class="branch" onclick="showScreen('numberMenuScreen')">
+          <span class="icon">🔢</span>
+          <h2>Học số 1–20</h2>
+          <p>Học theo thứ tự, học số <strong>ngẫu nhiên</strong>, <strong>Missing Letter</strong> và game <strong>nghiêng đầu 40 câu</strong>.</p>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- VOCABULARY MENU -->
+<section class="screen" id="vocabMenuScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" onclick="showScreen('homeScreen')">← Trang chính</button>
+      <div class="brand">🧠 TỪ VỰNG</div>
+      <div class="actions">
+        <button class="roundbtn musicToggle" type="button" title="Bật / tắt nhạc nền">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2 class="mode-title">Chọn cách luyện từ vựng</h2>
+      <p class="mode-sub">Luyện từ theo 2 hình thức khác nhau.</p>
+      <div class="mode-grid">
+        <button class="mode" onclick="openMissingGame()">
+          <span class="num">1</span>
+          <h3>🧩 Điền chữ còn thiếu</h3>
+          <p>Nhìn hình, xem từ bị thiếu 1 chữ cái và chọn đáp án đúng trong 3 lựa chọn.</p>
+        </button>
+        <button class="mode" onclick="startHeadVocab()">
+          <span class="num">2</span>
+          <h3>🧠 Nghiêng đầu chọn đáp án</h3>
+          <p>Luyện đủ <b>36 từ</b>: nhìn <b>hình ảnh</b> rồi nghiêng đầu <b>trái / phải</b> để chọn <b>từ đúng</b>.</p>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LETTER BRANCH MENU -->
+<section class="screen" id="letterMenuScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" onclick="showScreen('homeScreen')">← Trang chính</button>
+      <div class="brand">🔤 HỌC CHỮ CÁI A–Z</div>
+      <div class="actions">
+        <button class="roundbtn musicToggle" type="button" title="Bật / tắt nhạc nền">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2 class="mode-title">Chọn nhóm chữ cái</h2>
+      <p class="mode-sub">Có <b>4 nhóm, mỗi nhóm 6 chữ cái</b> và thêm <b>1 mục đầy đủ 26 chữ cái A–Z</b>.</p>
+      <div class="mode-grid">
+        <button class="mode" onclick="selectLetterGroup('A-F')">
+          <span class="num">1</span>
+          <h3>🔤 A • B • C • D • E • F</h3>
+          <p>6 chữ cái đầu tiên • 20 lượt luyện • 3 cách luyện.</p>
+        </button>
+        <button class="mode" onclick="selectLetterGroup('G-L')">
+          <span class="num">2</span>
+          <h3>🔤 G • H • I • J • K • L</h3>
+          <p>6 chữ cái tiếp theo • 20 lượt luyện • 3 cách luyện.</p>
+        </button>
+        <button class="mode" onclick="selectLetterGroup('M-R')">
+          <span class="num">3</span>
+          <h3>🔤 M • N • O • P • Q • R</h3>
+          <p>6 chữ cái tiếp theo • 20 lượt luyện • 3 cách luyện.</p>
+        </button>
+        <button class="mode" onclick="selectLetterGroup('S-X')">
+          <span class="num">4</span>
+          <h3>🔤 S • T • U • V • W • X</h3>
+          <p>6 chữ cái tiếp theo • 20 lượt luyện • 3 cách luyện.</p>
+        </button>
+        <button class="mode" onclick="selectLetterGroup('A-Z')" style="grid-column:1/-1">
+          <span class="num">5</span>
+          <h3>🌟 Đầy đủ 26 chữ cái A–Z</h3>
+          <p>Luyện toàn bộ <b>A đến Z</b>. Mỗi game chạy <b>26 lượt</b> để học sinh gặp đủ cả 26 chữ cái.</p>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBER 1-20 MENU -->
+<section class="screen active" id="numberMenuScreen">
+  <div class="shell">
+    <div class="topbar">
+      <div class="pill">HENRY ENGLISH</div>
+      <div class="brand">🔢 HỌC SỐ 1–20</div>
+      <div class="actions">
+        <button class="roundbtn musicToggle" type="button" title="Bật / tắt nhạc nền">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2 class="mode-title">Chọn cách học số</h2>
+      <p class="mode-sub">Chọn 1 trong 4 cách luyện tập Numbers 1–20.</p>
+      <div class="mode-grid">
+        <button class="mode" onclick="startNumberAuto('ordered')">
+          <span class="num">1</span>
+          <h3>🔊 Số + chữ • Theo thứ tự</h3>
+          <p>Hiện <b>số</b> và <b>cách viết tiếng Anh</b> bên dưới, đọc to <b>3 lần</b> rồi tự chuyển từ 1 đến 20.</p>
+        </button>
+        <button class="mode" onclick="startNumberAuto('random')">
+          <span class="num">2</span>
+          <h3>🔀 Nghe & Lặp lại • Ngẫu nhiên</h3>
+          <p>Vẫn hiện số + chữ và đọc <b>3 lần</b>, nhưng 20 số được <b>xáo trộn không theo thứ tự</b>.</p>
+        </button>
+        <button class="mode" onclick="startNumberMissing()">
+          <span class="num">3</span>
+          <h3>🧩 Số + Missing Letter • 20 câu</h3>
+          <p>Hiện <b>chữ số</b> và <b>từ tiếng Anh bị thiếu 1 chữ cái</b>. Chọn chữ đúng trong <b>3 đáp án</b>.</p>
+        </button>
+        <button class="mode" onclick="startHeadNumbers()">
+          <span class="num">4</span>
+          <h3>🧠 Nghiêng đầu chọn số đúng • 40 câu</h3>
+          <p>Nghe số tối đa <b>3 lần</b>, nghiêng đầu <b>trái / phải</b> để chọn. Mỗi số 1–20 xuất hiện <b>2 lần</b> → tổng cộng <b>40 câu</b>.</p>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GROUP PRACTICE MENU -->
+<section class="screen" id="groupPracticeScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" onclick="showScreen('letterMenuScreen')">← Chọn nhóm chữ</button>
+      <div class="brand" id="groupPracticeTitle">🔤 A–F</div>
+      <div class="actions">
+        <button class="roundbtn musicToggle" type="button" title="Bật / tắt nhạc nền">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2 class="mode-title" id="groupHeading">A • B • C • D • E • F</h2>
+      <p class="mode-sub" id="groupPracticeSubtitle">Chọn một cách luyện tập.</p>
+      <div class="mode-grid">
+        <button class="mode" onclick="startAutoLetters()">
+          <span class="num">1</span>
+          <h3>🔊 Nghe & Lặp lại</h3>
+          <p>Hệ thống hiển thị chữ cái và đọc <b>3 lần</b>, sau đó tự chuyển sang lượt tiếp theo.</p>
+        </button>
+        <button class="mode" onclick="startListenChoice()">
+          <span class="num">2</span>
+          <h3>👂 Nghe & Chọn đáp án đúng</h3>
+          <p>Nghe một chữ cái và chọn đúng trong <b>3 đáp án</b>. Chọn đúng → hệ thống đọc lại → tự chuyển câu.</p>
+        </button>
+        <button class="mode" onclick="startHeadLetters()">
+          <span class="num">3</span>
+          <h3>🧠 Nghiêng đầu chọn đáp án</h3>
+          <p>Hệ thống đọc chữ cái tối đa <b>3 lần</b>. Có thể nghiêng đầu chọn ngay khi đang nghe; chọn đúng sẽ chuyển sớm, chọn sai vẫn nghe đủ 3 lần.</p>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTO LETTER MODE -->
+<section class="screen" id="autoLetterScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" onclick="stopAllSpeech();showScreen('groupPracticeScreen')">← Ba cách luyện</button>
+      <div class="brand">🔊 Nghe & Lặp lại</div>
+      <div class="actions">
+        <div class="pill" id="autoCounter">1</div>
+        <button class="roundbtn musicToggle" type="button">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="letter-stage">
+        <div class="kicker">Listen carefully • Nghe và đọc theo</div>
+        <div class="letter-big" id="autoLetter">A</div>
+        <div class="read-status" id="autoStatus">Chuẩn bị...</div>
+        <div class="small-note">Mỗi lượt được đọc 3 lần. Nhóm 6 chữ có 20 lượt; mục A–Z có 26 lượt.</div>
+        <div class="controls-row">
+          <button class="ctrl alt" onclick="repeatCurrentAuto()">🔊 Nghe lại</button>
+          <button class="ctrl" id="autoPauseBtn" onclick="toggleAutoPause()">⏸ Tạm dừng</button>
+        </div>
+        <div class="progress-wrap"><div class="progress" id="autoProgress"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBER AUTO MODE -->
+<section class="screen" id="numberAutoScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" onclick="stopNumberAuto();showScreen('numberMenuScreen')">← 4 cách luyện số</button>
+      <div class="brand" id="numberAutoTitle">🔢 Số 1–20</div>
+      <div class="actions">
+        <div class="pill" id="numberAutoCounter">1 / 20</div>
+        <button class="roundbtn musicToggle" type="button">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="letter-stage">
+        <div class="kicker" id="numberAutoKicker">Look • Listen • Repeat</div>
+        <div class="number-big" id="numberAutoDigit">1</div>
+        <div class="number-word" id="numberAutoWord">ONE</div>
+        <div class="read-status" id="numberAutoStatus">Chuẩn bị...</div>
+        <div class="small-note" id="numberAutoNote">Mỗi số được đọc 3 lần rồi tự chuyển sang số tiếp theo.</div>
+        <div class="controls-row">
+          <button class="ctrl alt" onclick="repeatCurrentNumber()">🔊 Nghe lại</button>
+          <button class="ctrl" id="numberAutoPauseBtn" onclick="toggleNumberPause()">⏸ Tạm dừng</button>
+        </div>
+        <div class="progress-wrap"><div class="progress" id="numberAutoProgress"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBER MISSING LETTER MODE -->
+<section class="screen" id="numberMissingScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" onclick="stopAllSpeech();showScreen('numberMenuScreen')">← 4 cách luyện số</button>
+      <div class="brand">🧩 NUMBER • MISSING LETTER</div>
+      <div class="actions">
+        <div class="pill" id="numberMissingCounter">Câu 1 / 20</div>
+        <div class="pill" id="numberMissingScore">⭐ 0 điểm</div>
+        <button class="roundbtn musicToggle" type="button">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="confetti" id="numberMissingConfetti"></div>
+      <button class="roundbtn" id="numberMissingSoundBtn" style="position:absolute;right:16px;top:16px;z-index:3" title="Nghe số">🔊</button>
+      <div class="game-grid">
+        <section class="visual">
+          <div class="number-big" id="numberMissingDigit" style="margin:0;max-width:320px;width:min(320px,70vw)">1</div>
+        </section>
+        <section class="prompt">
+          <div class="kicker">Look at the number • Choose the missing letter</div>
+          <div class="word" id="numberMissingWord">O<span class="blank">_</span>E</div>
+          <div class="hint">Nhìn chữ số và chọn chữ cái còn thiếu trong từ tiếng Anh.</div>
+          <div class="options" id="numberMissingOptions"></div>
+          <div class="feedback" id="numberMissingFeedback"></div>
+        </section>
+      </div>
+      <div class="progress-wrap"><div class="progress" id="numberMissingProgress"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LISTEN CHOICE MODE -->
+<section class="screen" id="listenChoiceScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" onclick="stopAllSpeech();showScreen('groupPracticeScreen')">← Ba cách luyện</button>
+      <div class="brand">👂 Nghe & Chọn đáp án đúng</div>
+      <div class="actions">
+        <div class="pill" id="listenCounter">Câu 1</div>
+        <div class="pill" id="listenScore">⭐ 0</div>
+        <button class="roundbtn musicToggle" type="button">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="confetti" id="confetti"></div>
+      <div class="listen-wrap">
+        <div class="kicker">Listen and choose the correct letter</div>
+        <button class="speaker" id="speakerBtn" onclick="playListenPrompt()" aria-label="Nghe lại chữ cái">🔊</button>
+        <div class="hint">Nghe âm thanh và chọn chữ cái đúng.</div>
+        <div class="letter-options" id="letterOptions"></div>
+        <div class="listen-feedback" id="listenFeedback"></div>
+        <div class="progress-wrap"><div class="progress" id="listenProgress"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSING LETTER GAME -->
+<section class="screen" id="missingScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" onclick="stopAllSpeech();showScreen('vocabMenuScreen')">← Từ vựng</button>
+      <div class="brand">🧩 Missing Letter</div>
+      <div class="actions">
+        <div class="pill" id="missingCounter">Câu 1 / 36</div>
+        <div class="pill" id="missingScore">⭐ 0 điểm</div>
+        <button class="roundbtn musicToggle" type="button">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="confetti" id="missingConfetti"></div>
+      <button class="roundbtn" id="wordSoundBtn" style="position:absolute;right:16px;top:16px;z-index:3" title="Nghe từ">🔊</button>
+      <div class="game-grid">
+        <section class="visual"><div class="emoji" id="missingEmoji">🍎</div></section>
+        <section class="prompt">
+          <div class="kicker">Chọn chữ cái còn thiếu</div>
+          <div class="word" id="missingWord">APP<span class="blank">_</span>E</div>
+          <div class="hint">Look at the picture and choose the missing letter.</div>
+          <div class="options" id="missingOptions"></div>
+          <div class="feedback" id="missingFeedback"></div>
+        </section>
+      </div>
+      <div class="progress-wrap"><div class="progress" id="missingProgress"></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- HEAD-CONTROLLED GAME -->
+<section class="screen" id="headGameScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" id="headBackBtn">← Quay lại</button>
+      <div class="brand" id="headGameTitle">🧠 Nghiêng đầu chọn đáp án</div>
+      <div class="actions">
+        <div class="pill" id="headCounter">Câu 1</div>
+        <div class="pill" id="headScore">⭐ 0</div>
+        <button class="roundbtn musicToggle" type="button">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="confetti" id="headConfetti"></div>
+      <div class="head-layout">
+        <div class="camera-card">
+          <video id="headVideo" playsinline muted></video>
+          <div class="camera-overlay" id="cameraOverlay"></div>
+          <button class="camera-start" id="cameraStartBtn" type="button">📷 Bật camera</button>
+          <button class="direction-flip" id="directionFlipBtn" type="button" title="Đổi chiều trái/phải">↔ Đổi hướng</button>
+          <div class="camera-status" id="cameraStatus">Chế độ nhóm: camera sẽ tính lựa chọn theo hướng nghiêng của nhiều người.</div>
+        </div>
+        <div class="head-game">
+          <div class="kicker" id="headKicker">Chọn đáp án đúng</div>
+          <div class="head-prompt" id="headPrompt"></div>
+          <div class="head-answers">
+            <button class="head-choice" id="leftChoice" type="button"></button>
+            <button class="head-choice" id="rightChoice" type="button"></button>
+          </div>
+          <div class="head-instruction">
+            <span class="calibrate" id="calibrationText">Chưa bật camera</span><br>
+            Cả nhóm nghiêng đầu <b>hơn 30°</b> về <b>← trái</b> hoặc <b>phải →</b>. Nghiêng nhẹ sẽ không tính đáp án; hệ thống lấy hướng chiếm đa số.
+          </div>
+          <div class="feedback" id="headFeedback"></div>
+          <div class="progress-wrap"><div class="progress" id="headProgress"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINISH -->
+<section class="screen" id="finishScreen">
+  <div class="shell">
+    <div class="panel finish">
+      <div class="trophy">🏆</div>
+      <h2 id="finishTitle">Hoàn thành!</h2>
+      <p id="finishText">Bạn đã hoàn thành bài luyện tập.</p>
+      <button class="primary" id="finishAgain">Luyện lại ↻</button>
+      <button class="secondary" onclick="showScreen('numberMenuScreen')">4 cách luyện số</button>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/face_detection.js"></script>
+<script>
+/* =========================
+   GLOBAL / NAVIGATION
+========================= */
+const LETTER_GROUPS = {
+  "A-F": "ABCDEF".split(""),
+  "G-L": "GHIJKL".split(""),
+  "M-R": "MNOPQR".split(""),
+  "S-X": "STUVWX".split(""),
+  "A-Z": "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
+};
+const GROUP_ROUNDS = 20;
+const NUMBERS_1_20 = [
+  [1,"one"],[2,"two"],[3,"three"],[4,"four"],[5,"five"],
+  [6,"six"],[7,"seven"],[8,"eight"],[9,"nine"],[10,"ten"],
+  [11,"eleven"],[12,"twelve"],[13,"thirteen"],[14,"fourteen"],[15,"fifteen"],
+  [16,"sixteen"],[17,"seventeen"],[18,"eighteen"],[19,"nineteen"],[20,"twenty"]
+];
+const NUMBER_HEAD_ROUNDS = 40;
+let selectedGroupKey = "A-F";
+let activeLetters = LETTER_GROUPS[selectedGroupKey];
+
+function currentLetterRoundCount(){
+  // Six-letter groups repeat to 20 rounds.
+  // Full A-Z runs 26 rounds so every letter appears at least once.
+  return selectedGroupKey === "A-Z" ? 26 : GROUP_ROUNDS;
+}
+let musicOn = true, musicCtx = null, musicTimer = null, musicStep = 0, musicWasPlaying = false;
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
+}
+function stopAllSpeech(){
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+  autoRunToken++;
+}
+function speak(text, onDone, rate=.82){
+  if(!("speechSynthesis" in window)){
+    if(onDone) setTimeout(onDone,900);
+    return;
+  }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang="en-GB";
+  u.rate=rate;
+  u.pitch=1.02;
+  let finished=false;
+  const done=()=>{
+    if(finished) return;
+    finished=true;
+    if(onDone) onDone();
+  };
+  u.onend=done;
+  u.onerror=done;
+  speechSynthesis.speak(u);
+  setTimeout(done,2200);
+}
+function speakLetter(letter,onDone){
+  // Read only the letter name itself in British English.
+  speak(letter, onDone, .78);
+}
+function speakNumberWord(word,onDone){
+  speak(word, onDone, .78);
+}
+function clickTone(ok=true){
+  try{
+    const c=new (window.AudioContext||window.webkitAudioContext)();
+    const o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);o.frequency.value=ok?720:230;
+    g.gain.setValueAtTime(.06,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.12);
+    o.start();o.stop(c.currentTime+.12);
+  }catch(e){}
+}
+function delay(ms){return new Promise(r=>setTimeout(r,ms))}
+
+/* =========================
+   BACKGROUND MUSIC
+========================= */
+const MELODY=[523.25,659.25,783.99,659.25,587.33,698.46,880,698.46,659.25,783.99,987.77,783.99,587.33,698.46,783.99,523.25];
+function ensureMusic(){
+  if(!musicOn) return;
+  if(!musicCtx) musicCtx=new (window.AudioContext||window.webkitAudioContext)();
+  if(musicCtx.state==="suspended") musicCtx.resume();
+  if(!musicTimer){
+    playMusicNote();
+    musicTimer=setInterval(playMusicNote,430);
+  }
+}
+function playMusicNote(){
+  if(!musicOn||!musicCtx) return;
+  const now=musicCtx.currentTime,o=musicCtx.createOscillator(),g=musicCtx.createGain();
+  o.type="triangle";o.frequency.value=MELODY[musicStep%MELODY.length];
+  g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.017,now+.02);g.gain.exponentialRampToValueAtTime(.0001,now+.25);
+  o.connect(g);g.connect(musicCtx.destination);o.start(now);o.stop(now+.27);musicStep++;
+}
+function stopMusic(){
+  if(musicTimer){clearInterval(musicTimer);musicTimer=null}
+}
+function pauseMusicForSpeech(){
+  musicWasPlaying=!!musicTimer;
+  if(musicWasPlaying) stopMusic();
+}
+function resumeMusicAfterSpeech(){
+  if(musicWasPlaying && musicOn) setTimeout(ensureMusic,250);
+}
+document.querySelectorAll(".musicToggle").forEach(btn=>{
+  btn.addEventListener("click",e=>{
+    e.stopPropagation();musicOn=!musicOn;
+    document.querySelectorAll(".musicToggle").forEach(b=>{
+      b.classList.toggle("off",!musicOn);b.textContent=musicOn?"🎵":"🔇";
+    });
+    if(musicOn) ensureMusic(); else stopMusic();
+  });
+});
+document.addEventListener("pointerdown",ensureMusic,{once:true});
+
+function selectLetterGroup(key){
+  selectedGroupKey = key;
+  activeLetters = LETTER_GROUPS[key];
+  const title = key.replace("-", "–");
+  const total = currentLetterRoundCount();
+
+  document.getElementById("groupPracticeTitle").textContent =
+    key === "A-Z" ? "🌟 26 chữ cái A–Z" : "🔤 " + title;
+
+  document.getElementById("groupHeading").textContent =
+    key === "A-Z" ? "A • B • C • D • E • F • G • H • I • J • K • L • M • N • O • P • Q • R • S • T • U • V • W • X • Y • Z"
+                  : activeLetters.join(" • ");
+
+  document.getElementById("groupPracticeSubtitle").innerHTML =
+    key === "A-Z"
+      ? "Đầy đủ <b>26 chữ cái</b> • mỗi game chạy <b>26 lượt</b> để đi đủ A–Z."
+      : "Nhóm <b>6 chữ cái</b> • mỗi game có <b>20 lượt luyện</b> để các chữ được lặp lại.";
+
+  showScreen("groupPracticeScreen");
+}
+
+function makeLetterRounds(letters){
+  const total = currentLetterRoundCount();
+
+  // Full A-Z: one shuffled pass through all 26 letters.
+  if(selectedGroupKey === "A-Z"){
+    return shuffled(letters);
+  }
+
+  // Six-letter groups: repeat balanced shuffled cycles until 20 rounds.
+  const rounds = [];
+  while(rounds.length < total){
+    rounds.push(...shuffled(letters));
+  }
+  return rounds.slice(0, total);
+}
+
+/* =========================
+   LETTER PRACTICE / MODE 1
+   AUTO A-L, 3 READS EACH
+========================= */
+let autoIndex=0, autoRunToken=0, autoPaused=false, autoRounds=[];
+const autoLetterEl=document.getElementById("autoLetter");
+const autoStatus=document.getElementById("autoStatus");
+const autoCounter=document.getElementById("autoCounter");
+const autoProgress=document.getElementById("autoProgress");
+const autoPauseBtn=document.getElementById("autoPauseBtn");
+
+function startAutoLetters(){
+  stopAllSpeech();
+  autoIndex=0;autoPaused=false;autoRunToken++;
+  autoRounds=makeLetterRounds(activeLetters);
+  autoPauseBtn.textContent="⏸ Tạm dừng";
+  showScreen("autoLetterScreen");
+  runAutoLetter(autoRunToken);
+}
+async function runAutoLetter(token){
+  if(token!==autoRunToken) return;
+  if(autoIndex>=autoRounds.length){
+    finishActivity("🎉 Hoàn thành!","Bạn đã hoàn thành " + currentLetterRoundCount() + " lượt Nghe & Lặp lại với nhóm " + selectedGroupKey + ".",startAutoLetters);
+    return;
+  }
+  const L=autoRounds[autoIndex];
+  autoLetterEl.textContent=L;
+  autoCounter.textContent=`${autoIndex+1} / ${currentLetterRoundCount()}`;
+  autoProgress.style.width=`${(autoIndex/currentLetterRoundCount())*100}%`;
+  const colors=[
+    ["#2867e8","#000055"],["#FF6600","#ff9b51"],["#17a455","#0b7b42"],
+    ["#8b5cf6","#5b21b6"],["#ec4899","#be185d"],["#0891b2","#155e75"]
+  ];
+  const c=colors[autoIndex%colors.length];
+  autoLetterEl.style.background=`linear-gradient(145deg,${c[0]},${c[1]})`;
+
+  pauseMusicForSpeech();
+  for(let n=1;n<=3;n++){
+    if(token!==autoRunToken) return;
+    while(autoPaused && token===autoRunToken) await delay(150);
+    autoStatus.textContent=`🔊 Lần ${n} / 3`;
+    await new Promise(resolve=>speakLetter(L,resolve));
+    await delay(420);
+  }
+  resumeMusicAfterSpeech();
+  if(token!==autoRunToken) return;
+  autoStatus.textContent="✅ Tiếp theo...";
+  await delay(700);
+  autoIndex++;
+  runAutoLetter(token);
+}
+function repeatCurrentAuto(){
+  if(autoIndex>=autoRounds.length) return;
+  pauseMusicForSpeech();
+  speakLetter(autoRounds[autoIndex],resumeMusicAfterSpeech);
+}
+function toggleAutoPause(){
+  autoPaused=!autoPaused;
+  autoPauseBtn.textContent=autoPaused?"▶ Tiếp tục":"⏸ Tạm dừng";
+  if(!autoPaused) ensureMusic();
+}
+
+/* =========================
+   NUMBER PRACTICE 1-20
+   MODE 1: ORDERED • MODE 2: RANDOM
+========================= */
+let numberAutoMode="ordered", numberAutoOrder=[], numberAutoIndex=0, numberAutoToken=0, numberAutoPaused=false;
+const numberAutoDigit=document.getElementById("numberAutoDigit");
+const numberAutoWord=document.getElementById("numberAutoWord");
+const numberAutoStatus=document.getElementById("numberAutoStatus");
+const numberAutoCounter=document.getElementById("numberAutoCounter");
+const numberAutoProgress=document.getElementById("numberAutoProgress");
+const numberAutoPauseBtn=document.getElementById("numberAutoPauseBtn");
+const numberAutoTitle=document.getElementById("numberAutoTitle");
+const numberAutoKicker=document.getElementById("numberAutoKicker");
+const numberAutoNote=document.getElementById("numberAutoNote");
+
+function startNumberAuto(mode="ordered"){
+  stopAllSpeech();
+  numberAutoMode=mode;
+  numberAutoIndex=0;
+  numberAutoPaused=false;
+  numberAutoToken++;
+  numberAutoOrder = mode==="random" ? shuffled(NUMBERS_1_20) : [...NUMBERS_1_20];
+  numberAutoPauseBtn.textContent="⏸ Tạm dừng";
+  numberAutoTitle.textContent = mode==="random" ? "🔀 Số 1–20 • Ngẫu nhiên" : "🔢 Số 1–20 • Theo thứ tự";
+  numberAutoKicker.textContent = mode==="random" ? "Random numbers • Listen & repeat" : "Numbers 1–20 • Listen & repeat";
+  numberAutoNote.innerHTML = mode==="random"
+    ? "Mỗi số được đọc <b>3 lần</b>. 20 số được xáo trộn và mỗi số xuất hiện 1 lần."
+    : "Mỗi số được đọc <b>3 lần</b> rồi tự chuyển lần lượt từ 1 đến 20.";
+  showScreen("numberAutoScreen");
+  runNumberAuto(numberAutoToken);
+}
+
+async function runNumberAuto(token){
+  if(token!==numberAutoToken) return;
+  if(numberAutoIndex>=numberAutoOrder.length){
+    const modeText=numberAutoMode==="random"?"ngẫu nhiên":"theo thứ tự";
+    finishActivity("🎉 Hoàn thành!",`Bạn đã hoàn thành 20 số 1–20 ở chế độ ${modeText}.`,()=>startNumberAuto(numberAutoMode));
+    return;
+  }
+
+  const [digit,word]=numberAutoOrder[numberAutoIndex];
+  numberAutoDigit.textContent=digit;
+  numberAutoWord.textContent=word.toUpperCase();
+  numberAutoCounter.textContent=`${numberAutoIndex+1} / 20`;
+  numberAutoProgress.style.width=`${(numberAutoIndex/20)*100}%`;
+
+  const colors=[
+    ["#FF6600","#d94f00"],["#2867e8","#000055"],["#17a455","#0b7b42"],
+    ["#8b5cf6","#5b21b6"],["#ec4899","#be185d"],["#0891b2","#155e75"]
+  ];
+  const c=colors[numberAutoIndex%colors.length];
+  numberAutoDigit.style.background=`linear-gradient(145deg,${c[0]},${c[1]})`;
+
+  pauseMusicForSpeech();
+  for(let n=1;n<=3;n++){
+    if(token!==numberAutoToken) return;
+    while(numberAutoPaused && token===numberAutoToken) await delay(150);
+    numberAutoStatus.textContent=`🔊 Lần ${n} / 3 • ${word.toUpperCase()}`;
+    await new Promise(resolve=>speakNumberWord(word,resolve));
+    await delay(420);
+  }
+  resumeMusicAfterSpeech();
+  if(token!==numberAutoToken) return;
+  numberAutoStatus.textContent="✅ Tiếp theo...";
+  await delay(700);
+  numberAutoIndex++;
+  runNumberAuto(token);
+}
+
+function repeatCurrentNumber(){
+  if(numberAutoIndex>=numberAutoOrder.length) return;
+  const word=numberAutoOrder[numberAutoIndex][1];
+  pauseMusicForSpeech();
+  speakNumberWord(word,resumeMusicAfterSpeech);
+}
+
+function toggleNumberPause(){
+  numberAutoPaused=!numberAutoPaused;
+  numberAutoPauseBtn.textContent=numberAutoPaused?"▶ Tiếp tục":"⏸ Tạm dừng";
+  if(!numberAutoPaused) ensureMusic();
+}
+
+function stopNumberAuto(){
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+  numberAutoToken++;
+  numberAutoPaused=false;
+}
+
+/* =========================
+   NUMBER PRACTICE 1-20
+   MODE 3: MISSING LETTER + 3 OPTIONS
+========================= */
+let numberMissingOrder=[],numberMissingIndex=0,numberMissingPoints=0,numberMissingAnswered=false,currentNumberMissing=null;
+const numberMissingDigit=document.getElementById("numberMissingDigit");
+const numberMissingWord=document.getElementById("numberMissingWord");
+const numberMissingOptions=document.getElementById("numberMissingOptions");
+const numberMissingFeedback=document.getElementById("numberMissingFeedback");
+const numberMissingCounter=document.getElementById("numberMissingCounter");
+const numberMissingScore=document.getElementById("numberMissingScore");
+const numberMissingProgress=document.getElementById("numberMissingProgress");
+
+function startNumberMissing(){
+  stopAllSpeech();
+  numberMissingOrder=shuffled(NUMBERS_1_20);
+  numberMissingIndex=0;
+  numberMissingPoints=0;
+  numberMissingScore.textContent="⭐ 0 điểm";
+  showScreen("numberMissingScreen");
+  renderNumberMissing();
+}
+
+function renderNumberMissing(){
+  numberMissingAnswered=false;
+  numberMissingFeedback.textContent="";
+  numberMissingFeedback.className="feedback";
+
+  if(numberMissingIndex>=numberMissingOrder.length){
+    finishActivity("🏆 Numbers Missing Letter hoàn thành!",`Bạn đạt ${numberMissingPoints} / 20 điểm.`,startNumberMissing);
+    return;
+  }
+
+  const [digit,word]=numberMissingOrder[numberMissingIndex];
+  const pos=Math.floor(Math.random()*word.length);
+  const correct=word[pos];
+  currentNumberMissing={digit,word,pos,correct};
+
+  numberMissingCounter.textContent=`Câu ${numberMissingIndex+1} / 20`;
+  numberMissingProgress.style.width=`${(numberMissingIndex/20)*100}%`;
+  numberMissingDigit.textContent=digit;
+  numberMissingWord.innerHTML=`${word.slice(0,pos).toUpperCase()}<span class="blank">_</span>${word.slice(pos+1).toUpperCase()}`;
+
+  const colors=[
+    ["#FF6600","#d94f00"],["#2867e8","#000055"],["#17a455","#0b7b42"],
+    ["#8b5cf6","#5b21b6"],["#ec4899","#be185d"],["#0891b2","#155e75"]
+  ];
+  const c=colors[numberMissingIndex%colors.length];
+  numberMissingDigit.style.background=`linear-gradient(145deg,${c[0]},${c[1]})`;
+
+  const wrong=shuffled(ALLLETTERS.filter(x=>x!==correct)).slice(0,2);
+  const choices=shuffled([correct,...wrong]);
+  numberMissingOptions.innerHTML="";
+  choices.forEach(ch=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.textContent=ch.toUpperCase();
+    b.onclick=()=>chooseNumberMissing(ch,b);
+    numberMissingOptions.appendChild(b);
+  });
+}
+
+function chooseNumberMissing(ch,btn){
+  if(numberMissingAnswered) return;
+
+  if(ch===currentNumberMissing.correct){
+    numberMissingAnswered=true;
+    numberMissingPoints++;
+    numberMissingScore.textContent=`⭐ ${numberMissingPoints} điểm`;
+    btn.classList.add("correct");
+    [...numberMissingOptions.children].forEach(x=>x.disabled=true);
+    numberMissingWord.textContent=currentNumberMissing.word.toUpperCase();
+    numberMissingFeedback.textContent=`✅ Chính xác! ${currentNumberMissing.digit} • ${currentNumberMissing.word.toUpperCase()}`;
+    numberMissingFeedback.className="feedback ok";
+    clickTone(true);
+    burst("numberMissingConfetti");
+    pauseMusicForSpeech();
+    speakNumberWord(currentNumberMissing.word,()=>{
+      resumeMusicAfterSpeech();
+      setTimeout(()=>{numberMissingIndex++;renderNumberMissing()},650);
+    });
+  }else{
+    btn.classList.add("wrong");
+    numberMissingFeedback.textContent="❌ Chưa đúng, thử lại nhé!";
+    numberMissingFeedback.className="feedback bad";
+    clickTone(false);
+    setTimeout(()=>btn.classList.remove("wrong"),350);
+  }
+}
+
+document.getElementById("numberMissingSoundBtn").onclick=()=>{
+  if(!currentNumberMissing) return;
+  pauseMusicForSpeech();
+  speakNumberWord(currentNumberMissing.word,resumeMusicAfterSpeech);
+};
+
+/* =========================
+   LETTER PRACTICE / MODE 2
+   LISTEN + 3 OPTIONS
+========================= */
+let listenOrder=[],listenIndex=0,listenPoints=0,listenAnswered=false,currentListen=null;
+const letterOptions=document.getElementById("letterOptions");
+const listenFeedback=document.getElementById("listenFeedback");
+const listenCounter=document.getElementById("listenCounter");
+const listenScore=document.getElementById("listenScore");
+const listenProgress=document.getElementById("listenProgress");
+
+function shuffled(a){return [...a].sort(()=>Math.random()-.5)}
+function startListenChoice(){
+  stopAllSpeech();
+  listenOrder=makeLetterRounds(activeLetters);
+  listenIndex=0;listenPoints=0;
+  listenScore.textContent="⭐ 0";
+  showScreen("listenChoiceScreen");
+  renderListenQuestion();
+}
+function renderListenQuestion(){
+  listenAnswered=false;
+  listenFeedback.textContent="";
+  listenFeedback.style.color="";
+  if(listenIndex>=listenOrder.length){
+    finishActivity("🌟 Hoàn thành!",`Bạn chọn đúng ${listenPoints} / ${currentLetterRoundCount()} câu với nhóm ${selectedGroupKey}.`,startListenChoice);
+    return;
+  }
+  currentListen=listenOrder[listenIndex];
+  listenCounter.textContent=`Câu ${listenIndex+1} / ${currentLetterRoundCount()}`;
+  listenProgress.style.width=`${(listenIndex/currentLetterRoundCount())*100}%`;
+
+  const wrong=shuffled(activeLetters.filter(x=>x!==currentListen)).slice(0,2);
+  const choices=shuffled([currentListen,...wrong]);
+  letterOptions.innerHTML="";
+  choices.forEach(L=>{
+    const b=document.createElement("button");
+    b.className="letter-choice";
+    b.textContent=L;
+    b.onclick=()=>chooseListenLetter(L,b);
+    letterOptions.appendChild(b);
+  });
+  setTimeout(playListenPrompt,380);
+}
+function playListenPrompt(){
+  if(!currentListen) return;
+  pauseMusicForSpeech();
+  speakLetter(currentListen,resumeMusicAfterSpeech);
+}
+function chooseListenLetter(L,btn){
+  if(listenAnswered) return;
+  if(L===currentListen){
+    listenAnswered=true;listenPoints++;
+    listenScore.textContent=`⭐ ${listenPoints}`;
+    btn.classList.add("correct");
+    [...letterOptions.children].forEach(x=>x.disabled=true);
+    listenFeedback.textContent=`✅ Đúng! ${currentListen}`;
+    listenFeedback.style.color="var(--green)";
+    clickTone(true);burst("confetti");
+    pauseMusicForSpeech();
+    speakLetter(currentListen,()=>{
+      resumeMusicAfterSpeech();
+      setTimeout(()=>{listenIndex++;renderListenQuestion()},650);
+    });
+  }else{
+    btn.classList.add("wrong");
+    listenFeedback.textContent="❌ Chưa đúng, nghe lại và thử nhé!";
+    listenFeedback.style.color="var(--red)";
+    clickTone(false);
+    setTimeout(()=>btn.classList.remove("wrong"),350);
+    setTimeout(playListenPrompt,450);
+  }
+}
+
+/* =========================
+   MISSING LETTER PRACTICE
+========================= */
+const WORDS=[
+["bill","👨"],["ball","⚽"],["bike","🚲"],["book","📘"],["cake","🎂"],["car","🚗"],
+["cat","🐱"],["cup","🥤"],["apple","🍎"],["bag","🎒"],["can","🥫"],["hat","🎩"],
+["desk","🪑"],["dog","🐶"],["door","🚪"],["duck","🦆"],["chicken","🐔"],["chips","🍟"],
+["fish","🐟"],["milk","🥛"],["bell","🔔"],["pen","🖊️"],["pencil","✏️"],["red","🔴"],
+["garden","🌷"],["gate","🚧"],["girl","👧"],["goat","🐐"],["hair","💇"],["hand","✋"],
+["head","🙂"],["horse","🐴"],["clocks","⏰"],["locks","🔒"],["mops","🧹"],["pots","🍲"]
+];
+const ALLLETTERS="abcdefghijklmnopqrstuvwxyz".split("");
+let missingOrder=[],missingIndex=0,missingPoints=0,missingAnswered=false,currentMissing=null;
+const missingEmoji=document.getElementById("missingEmoji");
+const missingWord=document.getElementById("missingWord");
+const missingOptions=document.getElementById("missingOptions");
+const missingFeedback=document.getElementById("missingFeedback");
+const missingCounter=document.getElementById("missingCounter");
+const missingScore=document.getElementById("missingScore");
+const missingProgress=document.getElementById("missingProgress");
+
+function openMissingGame(){
+  stopAllSpeech();
+  missingOrder=shuffled(WORDS);
+  missingIndex=0;missingPoints=0;
+  missingScore.textContent="⭐ 0 điểm";
+  showScreen("missingScreen");
+  renderMissing();
+}
+function renderMissing(){
+  missingAnswered=false;
+  missingFeedback.textContent="";
+  missingFeedback.className="feedback";
+  if(missingIndex>=missingOrder.length){
+    finishActivity("🏆 Missing Letter hoàn thành!",`Bạn đạt ${missingPoints} / ${missingOrder.length} điểm.`,openMissingGame);
+    return;
+  }
+  const [word,emoji]=missingOrder[missingIndex];
+  const pos=Math.floor(Math.random()*word.length);
+  const correct=word[pos];
+  currentMissing={word,emoji,pos,correct};
+
+  missingCounter.textContent=`Câu ${missingIndex+1} / ${missingOrder.length}`;
+  missingProgress.style.width=`${(missingIndex/missingOrder.length)*100}%`;
+  missingEmoji.textContent=emoji;
+  missingWord.innerHTML=`${word.slice(0,pos).toUpperCase()}<span class="blank">_</span>${word.slice(pos+1).toUpperCase()}`;
+
+  const wrong=shuffled(ALLLETTERS.filter(x=>x!==correct)).slice(0,2);
+  const choices=shuffled([correct,...wrong]);
+  missingOptions.innerHTML="";
+  choices.forEach(ch=>{
+    const b=document.createElement("button");
+    b.className="option";b.textContent=ch.toUpperCase();
+    b.onclick=()=>chooseMissing(ch,b);
+    missingOptions.appendChild(b);
+  });
+}
+function chooseMissing(ch,btn){
+  if(missingAnswered) return;
+  if(ch===currentMissing.correct){
+    missingAnswered=true;missingPoints++;
+    missingScore.textContent=`⭐ ${missingPoints} điểm`;
+    btn.classList.add("correct");
+    [...missingOptions.children].forEach(x=>x.disabled=true);
+    missingFeedback.textContent=`✅ Chính xác! ${currentMissing.word.toUpperCase()} • Đang đọc đáp án...`;
+    missingFeedback.className="feedback ok";
+    clickTone(true);burst("missingConfetti");
+    pauseMusicForSpeech();
+    speak(currentMissing.word,()=>{
+      resumeMusicAfterSpeech();
+      missingFeedback.textContent=`✅ ${currentMissing.word.toUpperCase()} • Sang câu tiếp theo...`;
+      setTimeout(()=>{missingIndex++;renderMissing()},650);
+    });
+  }else{
+    btn.classList.add("wrong");
+    missingFeedback.textContent="❌ Chưa đúng, thử lại nhé!";
+    missingFeedback.className="feedback bad";
+    clickTone(false);
+    setTimeout(()=>btn.classList.remove("wrong"),350);
+  }
+}
+document.getElementById("wordSoundBtn").onclick=()=>{
+  if(!currentMissing) return;
+  pauseMusicForSpeech();speak(currentMissing.word,resumeMusicAfterSpeech);
+};
+
+
+/* =========================
+   HEAD-CONTROLLED GAME
+   Vocabulary + selected 6-letter group
+========================= */
+const TOTAL_HEAD_ROUNDS=20; // used for six-letter head games
+let headMode="vocab",headOrder=[],headIndex=0,headPoints=0,headAnswered=false,headInputReady=true,headReadToken=0,headPendingWrongSide=null,headPromptReadsDone=0;
+let headCorrectSide="left",headCurrent=null;
+
+const headPrompt=document.getElementById("headPrompt");
+const leftChoice=document.getElementById("leftChoice");
+const rightChoice=document.getElementById("rightChoice");
+const headFeedback=document.getElementById("headFeedback");
+const headCounter=document.getElementById("headCounter");
+const headScore=document.getElementById("headScore");
+const headProgress=document.getElementById("headProgress");
+const headKicker=document.getElementById("headKicker");
+const headBackBtn=document.getElementById("headBackBtn");
+const headGameTitle=document.getElementById("headGameTitle");
+
+function makeHeadVocabRounds(){
+  // Vocabulary head game uses ALL 36 words exactly once per play-through.
+  return shuffled(WORDS);
+}
+
+function currentHeadRoundCount(){
+  if(headMode === "vocab") return WORDS.length;
+  if(headMode === "numbers") return NUMBER_HEAD_ROUNDS;
+  return currentLetterRoundCount();
+}
+
+function headUsesThreeReadAudio(){
+  return headMode === "letters" || headMode === "numbers";
+}
+
+function speakHeadCurrent(onDone){
+  if(!headCurrent){ if(onDone) onDone(); return; }
+  if(headMode === "letters") speakLetter(headCurrent.speak,onDone);
+  else speak(headCurrent.speak,onDone,.78);
+}
+function startHeadVocab(){
+  stopAllSpeech();stopHeadCamera();
+  headMode="vocab";headOrder=makeHeadVocabRounds();headIndex=0;headPoints=0;
+  headScore.textContent="⭐ 0";
+  headGameTitle.textContent="🧠 Nghiêng đầu • Từ vựng";
+  headKicker.textContent="Nhìn hình và chọn từ đúng";
+  headBackBtn.onclick=()=>{stopHeadCamera();stopAllSpeech();showScreen("vocabMenuScreen")};
+  showScreen("headGameScreen");renderHeadQuestion();
+  startHeadCamera();
+}
+function startHeadLetters(){
+  stopAllSpeech();stopHeadCamera();
+  headMode="letters";headOrder=makeLetterRounds(activeLetters);headIndex=0;headPoints=0;
+  headScore.textContent="⭐ 0";
+  headGameTitle.textContent=`🧠 Nghiêng đầu • ${selectedGroupKey}`;
+  headKicker.textContent="Nghe letter và chọn letter đúng";
+  headBackBtn.onclick=()=>{stopHeadCamera();stopAllSpeech();showScreen("groupPracticeScreen")};
+  showScreen("headGameScreen");renderHeadQuestion();
+  startHeadCamera();
+}
+function startHeadNumbers(){
+  stopAllSpeech();stopHeadCamera();
+  headMode="numbers";
+  headOrder=shuffled([...NUMBERS_1_20,...NUMBERS_1_20]);
+  headIndex=0;headPoints=0;
+  headScore.textContent="⭐ 0";
+  headGameTitle.textContent="🧠 Nghiêng đầu • Số 1–20";
+  headKicker.textContent="Nghe số và chọn số đúng";
+  headBackBtn.onclick=()=>{stopHeadCamera();stopAllSpeech();showScreen("numberMenuScreen")};
+  showScreen("headGameScreen");renderHeadQuestion();
+  startHeadCamera();
+}
+function renderHeadQuestion(){
+  headAnswered=false;
+  headInputReady = true;
+  headPendingWrongSide=null;
+  headPromptReadsDone=0;
+  headReadToken++;
+  headFeedback.textContent="";
+  headFeedback.className="feedback";
+  cameraOverlay.className="camera-overlay";
+
+  if(headIndex>=headOrder.length){
+    stopHeadCamera();
+    if(headMode==="vocab"){
+      finishActivity("🎯 Hoàn thành! ",`Bạn đạt ${headPoints} / ${WORDS.length} điểm với đủ 36 từ vựng.`,startHeadVocab);
+    }else if(headMode==="numbers"){
+      finishActivity("🎯 Hoàn thành! ",`Bạn đạt ${headPoints} / ${NUMBER_HEAD_ROUNDS} câu số 1–20. Mỗi số đã xuất hiện 2 lần.`,startHeadNumbers);
+    }else{
+      finishActivity("🎯 Hoàn thành! ",`Bạn đạt ${headPoints} / ${currentLetterRoundCount()} điểm với nhóm ${selectedGroupKey}.`,startHeadLetters);
+    }
+    return;
+  }
+
+  headCounter.textContent=`Câu ${headIndex+1} / ${currentHeadRoundCount()}`;
+  headProgress.style.width=`${(headIndex/currentHeadRoundCount())*100}%`;
+
+  if(headMode==="vocab") renderHeadVocabQuestion();
+  else if(headMode==="numbers") renderHeadNumberQuestion();
+  else renderHeadLetterQuestion();
+}
+function renderHeadVocabQuestion(){
+  const [word,emoji]=headOrder[headIndex];
+  const wrong=shuffled(WORDS.filter(x=>x[0]!==word))[0];
+  headCurrent={answer:word,speak:word};
+  headCorrectSide=Math.random()<.5?"left":"right";
+
+  // Vocabulary head game:
+  // show the IMAGE as the question and WORDS as the two answer options.
+  headPrompt.innerHTML=`
+    <div style="font-size:clamp(95px,17vw,160px);line-height:1.05;filter:drop-shadow(0 9px 15px rgba(0,0,0,.12))">${emoji}</div>
+    <div class="small-note">Nhìn hình và chọn từ đúng</div>
+  `;
+
+  const correctHTML=`<span class="label" style="font-size:clamp(28px,5vw,48px);letter-spacing:1px">${word.toUpperCase()}</span>`;
+  const wrongHTML=`<span class="label" style="font-size:clamp(28px,5vw,48px);letter-spacing:1px">${wrong[0].toUpperCase()}</span>`;
+
+  setHeadChoices(
+    headCorrectSide==="left"?correctHTML:wrongHTML,
+    headCorrectSide==="right"?correctHTML:wrongHTML
+  );
+}
+function renderHeadLetterQuestion(){
+  const letter=headOrder[headIndex];
+  const wrong=shuffled(activeLetters.filter(x=>x!==letter))[0];
+  headCurrent={answer:letter,speak:letter};
+  headInputReady=true;
+  headPendingWrongSide=null;
+  headPromptReadsDone=0;
+
+  headPrompt.innerHTML=`
+    <button class="speaker" type="button" onclick="replayHeadPrompt()" style="width:105px;height:105px;font-size:48px;margin:0">🔊</button>
+    <div class="small-note">Hệ thống đọc tối đa <b>3 lần</b>. Có thể nghiêng đầu chọn ngay từ lần đọc đầu tiên.</div>
+  `;
+  headCorrectSide=Math.random()<.5?"left":"right";
+
+  const correctHTML=`<span class="letter">${letter}</span>`;
+  const wrongHTML=`<span class="letter">${wrong}</span>`;
+
+  setHeadChoices(
+    headCorrectSide==="left"?correctHTML:wrongHTML,
+    headCorrectSide==="right"?correctHTML:wrongHTML
+  );
+
+  leftChoice.disabled=false;
+  rightChoice.disabled=false;
+  headFeedback.textContent="🎧 Đang đọc • Có thể chọn ngay";
+  headFeedback.className="feedback";
+
+  const token=headReadToken;
+  setTimeout(()=>readHeadLetterThreeTimes(token),320);
+}
+function renderHeadNumberQuestion(){
+  const [digit,word]=headOrder[headIndex];
+  const wrong=shuffled(NUMBERS_1_20.filter(x=>x[0]!==digit))[0];
+  headCurrent={answer:digit,speak:word};
+  headInputReady=true;
+  headPendingWrongSide=null;
+  headPromptReadsDone=0;
+
+  headPrompt.innerHTML=`
+    <button class="speaker" type="button" onclick="replayHeadPrompt()" style="width:105px;height:105px;font-size:48px;margin:0">🔊</button>
+    <div class="small-note">Hệ thống đọc số tối đa <b>3 lần</b>. Có thể nghiêng đầu chọn ngay từ lần đọc đầu tiên.</div>
+  `;
+  headCorrectSide=Math.random()<.5?"left":"right";
+
+  const correctHTML=`<span class="letter" style="font-size:clamp(62px,10vw,100px)">${digit}</span>`;
+  const wrongHTML=`<span class="letter" style="font-size:clamp(62px,10vw,100px)">${wrong[0]}</span>`;
+
+  setHeadChoices(
+    headCorrectSide==="left"?correctHTML:wrongHTML,
+    headCorrectSide==="right"?correctHTML:wrongHTML
+  );
+
+  leftChoice.disabled=false;
+  rightChoice.disabled=false;
+  headFeedback.textContent="🎧 Đang đọc • Có thể chọn ngay";
+  headFeedback.className="feedback";
+
+  const token=headReadToken;
+  setTimeout(()=>readHeadLetterThreeTimes(token),320);
+}
+
+function setHeadChoices(leftHTML,rightHTML){
+  leftChoice.className="head-choice";
+  rightChoice.className="head-choice";
+  leftChoice.innerHTML=`<span class="side">← TRÁI</span>${leftHTML}`;
+  rightChoice.innerHTML=`<span class="side">PHẢI →</span>${rightHTML}`;
+  leftChoice.disabled=false;rightChoice.disabled=false;
+  leftChoice.onclick=()=>selectHeadSide("left");
+  rightChoice.onclick=()=>selectHeadSide("right");
+}
+async function readHeadLetterThreeTimes(token=headReadToken){
+  if(!headCurrent || !headUsesThreeReadAudio()) return;
+
+  headInputReady=true;
+  pauseMusicForSpeech();
+
+  for(let n=1;n<=3;n++){
+    if(token!==headReadToken || !headUsesThreeReadAudio() || headAnswered) return;
+
+    headPromptReadsDone=n;
+    if(!headPendingWrongSide){
+      headFeedback.textContent=`🎧 Đang đọc ${n} / 3 • Có thể chọn ngay`;
+      headFeedback.className="feedback";
+    }else{
+      headFeedback.textContent=`❌ Đã chọn sai • Hệ thống tiếp tục đọc ${n} / 3`;
+      headFeedback.className="feedback bad";
+    }
+
+    await new Promise(resolve=>speakHeadCurrent(resolve));
+
+    // If a correct answer was chosen during this read, selectHeadSide()
+    // has already stopped the sequence by changing headReadToken/headAnswered.
+    if(token!==headReadToken || !headUsesThreeReadAudio() || headAnswered) return;
+
+    await delay(240);
+  }
+
+  if(token!==headReadToken || !headUsesThreeReadAudio() || headAnswered) return;
+
+  resumeMusicAfterSpeech();
+
+  // If the learner selected a wrong answer during read 1/2/3,
+  // finalize it only after all 3 prompt reads are complete.
+  if(headPendingWrongSide){
+    finalizeHeadLetterWrong();
+    return;
+  }
+
+  // No answer yet: keep accepting a left/right choice after the 3 reads.
+  headFeedback.textContent="🎧 Đã nghe đủ 3 lần • Chọn đáp án";
+  headFeedback.className="feedback";
+  headInputReady=true;
+  leftChoice.disabled=false;
+  rightChoice.disabled=false;
+}
+
+function replayHeadPrompt(){
+  if(!headCurrent) return;
+
+  if(headUsesThreeReadAudio()){
+    // Manual replay is one extra replay only; it does not restart the automatic 3-read sequence.
+    pauseMusicForSpeech();
+    speakHeadCurrent(resumeMusicAfterSpeech);
+  }else{
+    pauseMusicForSpeech();
+    speak(headCurrent.speak,resumeMusicAfterSpeech);
+  }
+}
+function selectHeadSide(side){
+  if(headAnswered) return;
+  if(headUsesThreeReadAudio() && !headInputReady) return;
+
+  const chosen=side==="left"?leftChoice:rightChoice;
+  const correct=headCorrectSide==="left"?leftChoice:rightChoice;
+  const ok=side===headCorrectSide;
+
+  // LETTER HEAD GAME:
+  // Correct during read 1 or 2 -> accept immediately, stop remaining prompt reads,
+  // read the correct answer once more, then move on.
+  // Wrong during the 3 prompt reads -> remember it, keep reading to 3/3,
+  // then reveal/read the correct answer and move on.
+  if(headUsesThreeReadAudio()){
+    if(ok){
+      finalizeHeadLetterCorrect(side);
+      return;
+    }
+
+    if(headPromptReadsDone < 3){
+      headPendingWrongSide=side;
+      headInputReady=false;
+      chosen.classList.add("wrong");
+      chosen.disabled=true;
+      correct.disabled=true;
+      headFeedback.textContent=`❌ Chưa đúng • Tiếp tục nghe đến đủ 3 lần`;
+      headFeedback.className="feedback bad";
+      clickTone(false);
+      return;
+    }
+
+    // Wrong after all 3 prompt reads: finalize immediately.
+    headPendingWrongSide=side;
+    finalizeHeadLetterWrong();
+    return;
+  }
+
+  headAnswered=true;
+  leftChoice.disabled=true;rightChoice.disabled=true;
+
+  if(ok){
+    headPoints++;headScore.textContent=`⭐ ${headPoints}`;
+    chosen.classList.add("correct");
+    headFeedback.textContent="✅ Chính xác!";
+    headFeedback.className="feedback ok";
+    clickTone(true);burst("headConfetti");
+  }else{
+    chosen.classList.add("wrong");
+    correct.classList.add("correct");
+    headFeedback.textContent="❌ Chưa đúng • Đây là đáp án đúng";
+    headFeedback.className="feedback bad";
+    clickTone(false);
+  }
+
+  pauseMusicForSpeech();
+  const next=()=>{
+    resumeMusicAfterSpeech();
+    setTimeout(()=>{headIndex++;renderHeadQuestion()},700);
+  };
+  if(headMode==="letters") speakLetter(headCurrent.speak,next);
+  else speak(headCurrent.speak,next);
+}
+
+
+function finalizeHeadLetterCorrect(side){
+  if(headAnswered) return;
+  headAnswered=true;
+  headInputReady=false;
+  headPendingWrongSide=null;
+
+  // Stop any current/remaining automatic prompt reads.
+  headReadToken++;
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+
+  const chosen=side==="left"?leftChoice:rightChoice;
+  chosen.classList.add("correct");
+  leftChoice.disabled=true;
+  rightChoice.disabled=true;
+
+  headPoints++;
+  headScore.textContent=`⭐ ${headPoints}`;
+  headFeedback.textContent="✅ Chính xác!";
+  headFeedback.className="feedback ok";
+  clickTone(true);
+  burst("headConfetti");
+
+  pauseMusicForSpeech();
+  speakHeadCurrent(()=>{
+    resumeMusicAfterSpeech();
+    setTimeout(()=>{headIndex++;renderHeadQuestion()},650);
+  });
+}
+
+function finalizeHeadLetterWrong(){
+  if(headAnswered) return;
+  headAnswered=true;
+  headInputReady=false;
+
+  headReadToken++;
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+
+  const wrongSide=headPendingWrongSide;
+  const chosen=wrongSide==="left"?leftChoice:rightChoice;
+  const correct=headCorrectSide==="left"?leftChoice:rightChoice;
+
+  if(chosen) chosen.classList.add("wrong");
+  correct.classList.add("correct");
+  leftChoice.disabled=true;
+  rightChoice.disabled=true;
+
+  headFeedback.textContent=`❌ Chưa đúng • Đáp án đúng là ${headCurrent.answer}`;
+  headFeedback.className="feedback bad";
+  clickTone(false);
+
+  pauseMusicForSpeech();
+  speakHeadCurrent(()=>{
+    resumeMusicAfterSpeech();
+    setTimeout(()=>{headIndex++;renderHeadQuestion()},700);
+  });
+}
+
+/* Camera + fast GROUP head-tilt detection
+   Uses lightweight MediaPipe Face Detection instead of full FaceMesh.
+   No long calibration step: the group can start almost immediately.
+*/
+const headVideo=document.getElementById("headVideo");
+const cameraStartBtn=document.getElementById("cameraStartBtn");
+const cameraStatus=document.getElementById("cameraStatus");
+const cameraOverlay=document.getElementById("cameraOverlay");
+const calibrationText=document.getElementById("calibrationText");
+const directionFlipBtn=document.getElementById("directionFlipBtn");
+
+let faceDetection=null;
+let headStream=null;
+let headLoopRunning=false;
+let detectionBusy=false;
+let lastDetectionAt=0;
+let lastHeadSelect=0;
+let stableSide=null;
+let stableSince=0;
+let directionMultiplier=1;
+
+// Tuned for classroom/group use:
+const HEAD_THRESHOLD=30;      // must tilt MORE THAN 30 degrees to count
+const HOLD_MS=180;            // short hold = faster response
+const COOLDOWN_MS=900;        // prevents accidental repeat selection
+const DETECTION_INTERVAL=95;  // about 10 detections/sec, keeps CPU responsive
+
+cameraStartBtn.onclick=startHeadCamera;
+directionFlipBtn.onclick=()=>{
+  directionMultiplier*=-1;
+  directionFlipBtn.textContent=directionMultiplier===1?"↔ Đổi hướng":"↔ Đã đảo hướng";
+  setTimeout(()=>directionFlipBtn.textContent="↔ Đổi hướng",1000);
+};
+
+async function startHeadCamera(){
+  if(headStream) return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    cameraStatus.textContent="Trình duyệt không hỗ trợ camera. Bạn vẫn có thể chạm vào đáp án.";
+    return;
+  }
+
+  try{
+    cameraStartBtn.disabled=true;
+    cameraStartBtn.textContent="Đang mở...";
+    cameraStatus.textContent="Đang mở camera nhóm...";
+
+    // Moderate resolution is enough for faces but much faster than full HD.
+    headStream=await navigator.mediaDevices.getUserMedia({
+      video:{
+        facingMode:"user",
+        width:{ideal:640},
+        height:{ideal:360},
+        frameRate:{ideal:24,max:30}
+      },
+      audio:false
+    });
+
+    headVideo.srcObject=headStream;
+    await headVideo.play();
+
+    cameraStartBtn.style.display="none";
+    calibrationText.textContent="👥 Chế độ nhóm • không cần cân chỉnh";
+    cameraStatus.textContent="Đang khởi động nhận diện nhanh...";
+
+    await initFaceDetection();
+    headLoopRunning=true;
+    detectionBusy=false;
+    stableSide=null;
+    stableSince=0;
+    lastDetectionAt=0;
+    cameraLoop(performance.now());
+  }catch(err){
+    cameraStartBtn.disabled=false;
+    cameraStartBtn.textContent="📷 Thử bật camera lại";
+    cameraStatus.textContent="Không mở được camera. Hãy cấp quyền camera hoặc chạm trực tiếp vào đáp án.";
+  }
+}
+
+async function initFaceDetection(){
+  if(faceDetection) return;
+  if(typeof FaceDetection==="undefined") throw new Error("FaceDetection unavailable");
+
+  faceDetection=new FaceDetection({
+    locateFile:file=>`https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/${file}`
+  });
+
+  // 'short' is much faster than FaceMesh and is ideal when the camera faces a class
+  // from a reasonable distance. Lower confidence helps pick up smaller faces.
+  faceDetection.setOptions({
+    selfieMode:false,
+    model:"short",
+    minDetectionConfidence:0.38
+  });
+
+  faceDetection.onResults(handleGroupFaceResults);
+}
+
+async function cameraLoop(now){
+  if(!headLoopRunning||!headStream) return;
+
+  if(!detectionBusy && headVideo.readyState>=2 && now-lastDetectionAt>=DETECTION_INTERVAL){
+    detectionBusy=true;
+    lastDetectionAt=now;
+    try{
+      await faceDetection.send({image:headVideo});
+    }catch(e){
+      // Keep the game usable even if one frame fails.
+    }finally{
+      detectionBusy=false;
+    }
+  }
+
+  if(headLoopRunning) requestAnimationFrame(cameraLoop);
+}
+
+function handleGroupFaceResults(results){
+  const detections=(results&&results.detections)||[];
+
+  if(!detections.length){
+    cameraOverlay.className="camera-overlay";
+    stableSide=null;
+    stableSince=0;
+    cameraStatus.textContent="Chưa thấy khuôn mặt • cho cả nhóm nhìn về camera";
+    return;
+  }
+
+  let leftVotes=0;
+  let rightVotes=0;
+
+  for(const detection of detections){
+    const lm=detection.landmarks||[];
+    if(lm.length<2) continue;
+
+    // MediaPipe Face Detection landmarks 0 and 1 are the two eyes.
+    const eyeA=lm[0];
+    const eyeB=lm[1];
+    if(!eyeA||!eyeB) continue;
+
+    let roll=Math.atan2(eyeB.y-eyeA.y,eyeB.x-eyeA.x)*180/Math.PI;
+    roll*=directionMultiplier;
+
+    // The video preview is mirrored for students, so map the motion to the
+    // side they visually lean toward on screen.
+    if(roll>HEAD_THRESHOLD) leftVotes++;
+    else if(roll<-HEAD_THRESHOLD) rightVotes++;
+  }
+
+  const faceCount=detections.length;
+  const activeVotes=leftVotes+rightVotes;
+
+  // For a group, do not let just one child trigger an answer when many faces
+  // are visible. Roughly one third of the visible group should lean together.
+  const requiredVotes=faceCount<=2 ? 1 : Math.max(2,Math.ceil(faceCount*0.34));
+
+  let side=null;
+  if(activeVotes>0){
+    const dominant=Math.max(leftVotes,rightVotes);
+    const dominance=dominant/activeVotes;
+
+    if(dominant>=requiredVotes && dominance>=0.65){
+      side=leftVotes>rightVotes?"left":"right";
+    }
+  }
+
+  cameraStatus.textContent=
+    `👥 ${faceCount} người • ← ${leftVotes}  |  ${rightVotes} → • cần ${requiredVotes} cùng hướng`;
+
+  cameraOverlay.className="camera-overlay"+(side?" "+side:"");
+
+  if(!side){
+    stableSide=null;
+    stableSince=0;
+    return;
+  }
+
+  const now=performance.now();
+
+  if(stableSide!==side){
+    stableSide=side;
+    stableSince=now;
+    return;
+  }
+
+  if(now-stableSince>=HOLD_MS && now-lastHeadSelect>=COOLDOWN_MS && !headAnswered && (!headUsesThreeReadAudio() || headInputReady)){
+    lastHeadSelect=now;
+    stableSide=null;
+    stableSince=0;
+    selectHeadSide(side);
+  }
+}
+
+function stopHeadCamera(){
+  headLoopRunning=false;
+  detectionBusy=false;
+
+  if(headStream){
+    headStream.getTracks().forEach(track=>track.stop());
+    headStream=null;
+  }
+
+  headVideo.srcObject=null;
+  stableSide=null;
+  stableSince=0;
+
+  cameraStartBtn.style.display="block";
+  cameraStartBtn.disabled=false;
+  cameraStartBtn.textContent="📷 Bật camera";
+
+  cameraStatus.textContent="Chế độ nhóm: chỉ tính khi nghiêng đầu hơn 30°; hệ thống lấy hướng của nhiều người.";
+  calibrationText.textContent="👥 Chế độ nhóm • không cần cân chỉnh";
+  cameraOverlay.className="camera-overlay";
+}
+
+/* =========================
+   FINISH / EFFECTS
+========================= */
+function finishActivity(title,text,againFn){
+  stopAllSpeech();
+  document.getElementById("finishTitle").textContent=title;
+  document.getElementById("finishText").textContent=text;
+  document.getElementById("finishAgain").onclick=againFn;
+  showScreen("finishScreen");
+}
+function burst(id){
+  const box=document.getElementById(id);
+  const colors=["#FF6600","#2867e8","#17a455","#e42d2d","#f7c948","#8b5cf6"];
+  for(let i=0;i<22;i++){
+    const p=document.createElement("i");
+    p.style.left=(44+Math.random()*20)+"%";p.style.top="36%";
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];p.style.opacity="1";
+    p.animate([
+      {transform:"translate(0,0) rotate(0deg)",opacity:1},
+      {transform:`translate(${(Math.random()-.5)*430}px,${120+Math.random()*200}px) rotate(${Math.random()*720}deg)`,opacity:0}
+    ],{duration:850+Math.random()*550,easing:"cubic-bezier(.2,.7,.2,1)"});
+    box.appendChild(p);setTimeout(()=>p.remove(),1500);
+  }
+}
+</script>
+</body>
+</html>
