@@ -396,10 +396,10 @@ button{font:inherit}
           <h3>🧩 Số + Missing Letter • 20 câu</h3>
           <p>Hiện <b>chữ số</b> và <b>từ tiếng Anh bị thiếu 1 chữ cái</b>. Chọn chữ đúng trong <b>3 đáp án</b>.</p>
         </button>
-        <button class="mode" onclick="startHeadNumbers()">
+        <button class="mode" onclick="startNumberListenChoice()">
           <span class="num">4</span>
-          <h3>🧠 Nghiêng đầu chọn số đúng • 40 câu</h3>
-          <p>Nghe số tối đa <b>3 lần</b>, nghiêng đầu <b>trái / phải</b> để chọn. Mỗi số 1–20 xuất hiện <b>2 lần</b> → tổng cộng <b>40 câu</b>.</p>
+          <h3>👂 Nghe & Chọn đáp án đúng • 20 câu</h3>
+          <p>Hệ thống <b>đọc một số bằng tiếng Anh</b>. Chọn đúng chữ số trong <b>3 đáp án</b>; sau khi chọn, hệ thống <b>đọc đáp án đúng</b> rồi tự chuyển câu.</p>
         </button>
       </div>
     </div>
@@ -523,6 +523,32 @@ button{font:inherit}
         </section>
       </div>
       <div class="progress-wrap"><div class="progress" id="numberMissingProgress"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBER LISTEN & CHOOSE MODE -->
+<section class="screen" id="numberListenChoiceScreen">
+  <div class="shell">
+    <div class="topbar">
+      <button class="back" onclick="stopAllSpeech();showScreen('numberMenuScreen')">← 4 cách luyện số</button>
+      <div class="brand">👂 Nghe & Chọn số đúng</div>
+      <div class="actions">
+        <div class="pill" id="numberListenCounter">Câu 1 / 20</div>
+        <div class="pill" id="numberListenScore">⭐ 0 điểm</div>
+        <button class="roundbtn musicToggle" type="button">🎵</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="confetti" id="numberListenConfetti"></div>
+      <div class="listen-wrap">
+        <div class="kicker">Listen and choose the correct number</div>
+        <button class="speaker" id="numberListenSpeaker" onclick="playNumberListenPrompt()" aria-label="Nghe lại số">🔊</button>
+        <div class="hint">Nghe số bằng tiếng Anh và chọn chữ số đúng.</div>
+        <div class="letter-options" id="numberListenOptions"></div>
+        <div class="listen-feedback" id="numberListenFeedback"></div>
+        <div class="progress-wrap"><div class="progress" id="numberListenProgress"></div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1040,6 +1066,103 @@ document.getElementById("numberMissingSoundBtn").onclick=()=>{
   pauseMusicForSpeech();
   speakNumberWord(currentNumberMissing.word,resumeMusicAfterSpeech);
 };
+
+/* =========================
+   NUMBER PRACTICE 1-20
+   MODE 4: LISTEN + CHOOSE 1 OF 3
+========================= */
+let numberListenOrder=[], numberListenIndex=0, numberListenPoints=0, numberListenAnswered=false, currentNumberListen=null;
+const numberListenOptions=document.getElementById("numberListenOptions");
+const numberListenFeedback=document.getElementById("numberListenFeedback");
+const numberListenCounter=document.getElementById("numberListenCounter");
+const numberListenScore=document.getElementById("numberListenScore");
+const numberListenProgress=document.getElementById("numberListenProgress");
+
+function startNumberListenChoice(){
+  stopAllSpeech();
+  numberListenOrder=shuffled(NUMBERS_1_20);
+  numberListenIndex=0;
+  numberListenPoints=0;
+  numberListenAnswered=false;
+  numberListenScore.textContent="⭐ 0 điểm";
+  showScreen("numberListenChoiceScreen");
+  renderNumberListenQuestion();
+}
+
+function renderNumberListenQuestion(){
+  stopAllSpeech();
+  numberListenAnswered=false;
+  numberListenFeedback.textContent="";
+  numberListenFeedback.style.color="";
+
+  if(numberListenIndex>=numberListenOrder.length){
+    finishActivity("🌟 Hoàn thành!",`Bạn chọn đúng ${numberListenPoints} / 20 câu Numbers 1–20.`,startNumberListenChoice);
+    return;
+  }
+
+  currentNumberListen=numberListenOrder[numberListenIndex];
+  const [digit,word]=currentNumberListen;
+  numberListenCounter.textContent=`Câu ${numberListenIndex+1} / 20`;
+  numberListenProgress.style.width=`${(numberListenIndex/20)*100}%`;
+
+  const wrong=shuffled(NUMBERS_1_20.filter(x=>x[0]!==digit)).slice(0,2);
+  const choices=shuffled([currentNumberListen,...wrong]);
+  numberListenOptions.innerHTML="";
+  choices.forEach(([d,w])=>{
+    const b=document.createElement("button");
+    b.className="letter-choice";
+    b.textContent=d;
+    b.setAttribute("aria-label",`Số ${d}`);
+    b.onclick=()=>chooseNumberListen(d,b);
+    numberListenOptions.appendChild(b);
+  });
+
+  setTimeout(playNumberListenPrompt,420);
+}
+
+function playNumberListenPrompt(){
+  if(!currentNumberListen || numberListenAnswered) return;
+  pauseMusicForSpeech();
+  speakNumberWord(currentNumberListen[1],resumeMusicAfterSpeech);
+}
+
+function chooseNumberListen(chosenDigit,btn){
+  if(numberListenAnswered || !currentNumberListen) return;
+  numberListenAnswered=true;
+  const [correctDigit,correctWord]=currentNumberListen;
+  const correct=chosenDigit===correctDigit;
+
+  [...numberListenOptions.children].forEach(b=>{
+    b.disabled=true;
+    if(Number(b.textContent)===correctDigit) b.classList.add("correct");
+  });
+
+  if(correct){
+    numberListenPoints++;
+    numberListenScore.textContent=`⭐ ${numberListenPoints} điểm`;
+    numberListenFeedback.textContent=`✅ Chính xác! ${correctDigit} • ${correctWord.toUpperCase()} • Nghe đáp án...`;
+    numberListenFeedback.style.color="var(--green)";
+    clickTone(true);
+    burst("numberListenConfetti");
+  }else{
+    btn.classList.add("wrong");
+    numberListenFeedback.textContent=`❌ Đáp án đúng: ${correctDigit} • ${correctWord.toUpperCase()} • Nghe đáp án...`;
+    numberListenFeedback.style.color="var(--red)";
+    clickTone(false);
+  }
+
+  pauseMusicForSpeech();
+  speakNumberWord(correctWord,()=>{
+    resumeMusicAfterSpeech();
+    numberListenFeedback.textContent = correct
+      ? `✅ ${correctDigit} • ${correctWord.toUpperCase()} • Sang câu tiếp theo...`
+      : `✅ Đáp án: ${correctDigit} • ${correctWord.toUpperCase()} • Sang câu tiếp theo...`;
+    setTimeout(()=>{
+      numberListenIndex++;
+      renderNumberListenQuestion();
+    },700);
+  });
+}
 
 /* =========================
    LETTER PRACTICE / MODE 2
